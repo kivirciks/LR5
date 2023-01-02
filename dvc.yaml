@@ -1,0 +1,41 @@
+stages:
+  preprocessing:
+    cmd: python prepare_dataset.py
+    deps:
+    - data/iris.csv
+    - prepare_dataset.py
+    outs:
+    - data/test/iris_test.csv
+    - data/train/iris_train.csv
+  kmeans_train:
+    cmd: python k-means/k-means.py
+    deps:
+    - data/test/iris_test.csv
+    - data/train/iris_train.csv
+    - k-means/k-means.py
+    outs:
+    - k-means/predict.txt
+  dtree_train:
+    cmd: python dtree/dtree.py
+    deps:
+    - data/test/iris_test.csv
+    - data/train/iris_train.csv
+    - dtree/dtree.py
+    outs:
+    - dtree/predict.txt
+  random-forest_train:
+    cmd: python random-forest/random-forest.py
+    deps:
+    - data/test/iris_test.csv
+    - data/train/iris_train.csv
+    - random-forest/random-forest.py
+    outs:
+    - random-forest/predict.txt
+  evaluate:
+    cmd: python evaluate.py
+    deps:
+    - k-means/predict.txt
+    - dtree/predict.txt
+    - random-forest/predict.txt
+    metrics:
+    - metrics.txt

@@ -1,0 +1,95 @@
+schema: '2.0'
+stages:
+  preprocessing:
+    cmd: python prepare_dataset.py
+    deps:
+    - path: data/iris.csv
+      md5: 8215afc33f59c42a868782d853fa8200
+      size: 4607
+    - path: prepare_dataset.py
+      md5: 02f5553b4240dff1c6e1ceae26891ecd
+      size: 703
+    outs:
+    - path: data/test/iris_test.csv
+      md5: fe55ea60b10d748eb11e75d9d50ec529
+      size: 1059
+    - path: data/train/iris_train.csv
+      md5: 5da922502f9464b7b7bd58cb40e4fb71
+      size: 2397
+  evaluate:
+    cmd: python evaluate.py
+    deps:
+    - path: dtree/predict.txt
+      md5: d7da6d0ee0aec463c2a33147b703c4dc
+      size: 180
+    - path: k-means/predict.txt
+      md5: 71080036595cb3f5602a7cc2da186edd
+      size: 180
+    - path: random-forest/predict.txt
+      md5: d7da6d0ee0aec463c2a33147b703c4dc
+      size: 180
+    outs:
+    - path: metrics.txt
+      md5: 80651ead86f4566d5763a7eec7448c94
+      size: 60
+  kmeans_train:
+    cmd: python k-means/k-means.py
+    deps:
+    - path: data/test/iris_test.csv
+      md5: fe55ea60b10d748eb11e75d9d50ec529
+      size: 1059
+    - path: data/train/iris_train.csv
+      md5: 5da922502f9464b7b7bd58cb40e4fb71
+      size: 2397
+    - path: k-means/k-means.py
+      md5: d6d074ce4a36af2c8711a7589f2882eb
+      size: 1326
+    outs:
+    - path: k-means/predict.txt
+      md5: 71080036595cb3f5602a7cc2da186edd
+      size: 180
+  eval:
+    cmd: python evaluate.py
+    deps:
+    - path: dtree/predict.txt
+      md5: d7da6d0ee0aec463c2a33147b703c4dc
+      size: 180
+    - path: k-means/predict.txt
+      md5: 71080036595cb3f5602a7cc2da186edd
+      size: 180
+    outs:
+    - path: metrics.txt
+      md5: 60a75994cdfa883742007ce024e5fe20
+      size: 47
+  dtree_train:
+    cmd: python dtree/dtree.py
+    deps:
+    - path: data/test/iris_test.csv
+      md5: fe55ea60b10d748eb11e75d9d50ec529
+      size: 1059
+    - path: data/train/iris_train.csv
+      md5: 5da922502f9464b7b7bd58cb40e4fb71
+      size: 2397
+    - path: dtree/dtree.py
+      md5: 6d1337a00b4c2dc124109458dc8944b9
+      size: 672
+    outs:
+    - path: dtree/predict.txt
+      md5: d7da6d0ee0aec463c2a33147b703c4dc
+      size: 180
+  random-forest_train:
+    cmd: python random-forest/random-forest.py
+    deps:
+    - path: data/test/Iris_test.csv
+      md5: fe55ea60b10d748eb11e75d9d50ec529
+      size: 1059
+    - path: data/train/Iris_train.csv
+      md5: 5da922502f9464b7b7bd58cb40e4fb71
+      size: 2397
+    - path: random-forest/random-forest.py
+      md5: 2ecf73e728c530b3b274b91b75c160dd
+      size: 706
+    outs:
+    - path: random-forest/predict.txt
+      md5: d7da6d0ee0aec463c2a33147b703c4dc
+      size: 180
